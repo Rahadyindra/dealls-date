@@ -2,7 +2,6 @@
   "name": "dealltest",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
@@ -14,13 +13,20 @@
   "description": "",
   "dependencies": {
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.6",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "pg": "^8.13.1",
     "postgres": "^3.4.5",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.2"
+    "@types/sequelize": "^4.28.20",
+    "sequelize-cli": "^6.6.2",
+    "sequelize-cli-typescript": "^3.2.0-c",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }
