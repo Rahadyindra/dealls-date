@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config({ path: __dirname + "/../.env" });
 import express from "express";
 import cors from "cors";
-import sequelize from "./database/connection";
+import sequelize from "./database/Connection";
+import User from "./database/models/User";
 
 const app = express();
 
