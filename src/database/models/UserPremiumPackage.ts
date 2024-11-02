@@ -34,7 +34,7 @@ class UserPremiumPackage extends Model<
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,   
+    allowNull: false,
     references: {
       model: User,
       key: "id",
