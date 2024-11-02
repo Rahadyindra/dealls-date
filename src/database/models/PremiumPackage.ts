@@ -9,6 +9,8 @@ interface PremiumPackageAttributes {
   price: number;
   noSwipeQuota: boolean;
   verifiedLabel: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface PremiumPackageCreationAttributes

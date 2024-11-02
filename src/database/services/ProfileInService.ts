@@ -1,20 +1,40 @@
-import Profile from "../models/Profile"; // Import your Profile model
-import { Request, Response } from "express";
+import { NumberColorFormat } from "@faker-js/faker/.";
+import Profile from "../models/Profile";
+import User from "../models/User";
+import { Op } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 
-const ITEMS_PER_PAGE = 10;
+export default class ProfileInService {
+  static async pagingProfileForTodayByUserId(
+    userId: number,
+    page: number
+  ): Promise<Profile[] | null> {
+    const ITEMS_PER_PAGE = 10;
+    try {
+      const offset = (page - 1) * ITEMS_PER_PAGE;
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
 
-export const getPaginatedProfiles = async (req: Request, res: Response) => {
-  try {
-    const page = parseInt(req.query.page as string) || 1;
-    const offset = (page - 1) * ITEMS_PER_PAGE;
+      const endOfToday = new Date();
+      endOfToday.setHours(23, 59, 59, 999);
 
-    const profiles = await Profile.findAll({
-      limit: ITEMS_PER_PAGE,
-      offset: offset,
-    });
-
-    res.json({ page, profiles });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve profiles", error });
+      const profiles = await Profile.findAll({
+        limit: ITEMS_PER_PAGE,
+        offset: offset,
+        where: {
+          id: {
+            [Op.notIn]: Sequelize.literal(`(
+        SELECT "profileId"
+        FROM "swipes"
+        WHERE "userId" = ${userId}
+        AND "createdAt" BETWEEN '${startOfToday.toISOString()}' AND '${endOfToday.toISOString()}'
+      )`),
+          },
+        },
+      });
+      return profiles;
+    } catch (error) {
+      throw { name: "something.wrong" };
+    }
   }
-};
+}

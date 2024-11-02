@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { comparePassword, hashPassword } from "../helpers/Bcrypt";
 import User from "../database/models/User";
 import Profile from "../database/models/Profile";
-import UserService from "../database/services/UserInService";
+import UserInService from "../database/services/UserInService";
 import { createToken } from "../helpers/Jwt";
 
 interface RegisterCredentials {
@@ -37,7 +37,8 @@ export async function registerExecuteProcessor(
       username,
       email,
       password: hashedPass,
-      isVerified: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     await Profile.create({
@@ -46,6 +47,9 @@ export async function registerExecuteProcessor(
       age,
       gender,
       profilePicture,
+      isVerified: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
     res.status(201).json({
       message: "Register Successful",
@@ -65,7 +69,7 @@ export async function loginExecuteProcessor(
     if (!email || !password) {
       throw { name: "invalid" };
     }
-    const loginUser = await UserService.findByEmail(email);
+    const loginUser = await UserInService.findByEmail(email);
     if (!loginUser) {
       throw { name: "bad.login" };
     }

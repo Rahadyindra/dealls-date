@@ -12,9 +12,12 @@ import Profile from "./Profile";
 
 interface SwipeAttributes {
   id: number;
-  userId: number; 
-  profileId: number; 
-  swipeDirection: "like" | "pass";
+  userId: number;
+  profileId: number;
+  like: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  latest: boolean;
 }
 
 interface SwipeCreationAttributes extends Optional<SwipeAttributes, "id"> {}
@@ -32,13 +35,22 @@ class Swipe extends Model<SwipeAttributes, SwipeCreationAttributes> {
   declare userId: number;
 
   @ForeignKey(() => Profile)
-  @Column({ type: DataType.INTEGER, allowNull: false })
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: "id",
+    },
+  })
   declare profileId: number;
 
-  @Column({ type: DataType.ENUM("like", "pass"), allowNull: false })
-  declare swipeDirection: "like" | "pass";
+  @Column({ type: DataType.BOOLEAN, allowNull: false })
+  declare like: boolean;
 
-  // Associations
+  @Column({ type: DataType.BOOLEAN, allowNull: false })
+  declare latest: boolean;
+
   @BelongsTo(() => User)
   declare user: User;
 

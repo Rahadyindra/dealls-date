@@ -6,8 +6,6 @@ export interface UserResponse {
   id: number;
   username: string;
   email: string;
-  isVerified: boolean;
-  premiumUntil?: Date;
 }
 
 export async function userAuthentication(

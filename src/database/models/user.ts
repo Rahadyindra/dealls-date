@@ -1,16 +1,23 @@
-import { Model, Table, Column, DataType, HasMany } from "sequelize-typescript";
+import {
+  Model,
+  Table,
+  Column,
+  DataType,
+  HasMany,
+  HasOne,
+} from "sequelize-typescript";
 import { Optional } from "sequelize";
-import Profile from "./Profile"; // Import Profile model
-import Swipe from "./Swipe"; // Import Swipe model
-import UserPremiumPackage from "./UserPremiumPackage"; // Import UserPremiumPackage model
-
+import Profile from "./Profile";
+import Swipe from "./Swipe";
+import UserPremiumPackage from "./UserPremiumPackage";
 interface UserAttributes {
   id: number;
   username: string;
   email: string;
   password: string;
-  isVerified: boolean;
-  premiumUntil?: Date; // Optional as it might not apply to all users
+  premiumUntil?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
@@ -32,21 +39,17 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
 
-  @Column({ type: DataType.BOOLEAN, defaultValue: false })
-  declare isVerified: boolean;
-
   @Column({ type: DataType.DATE })
   declare premiumUntil?: Date;
 
-  // Associations
   @HasMany(() => Profile)
   declare profiles: Profile[];
 
   @HasMany(() => Swipe)
   declare swipes: Swipe[];
 
-  @HasMany(() => UserPremiumPackage)
-  declare userPremiumPackages: UserPremiumPackage[];
+  @HasOne(() => UserPremiumPackage)
+  declare userPremiumPackages: UserPremiumPackage;
 }
 
 export default User;

@@ -1,18 +1,6 @@
 import User from "../models/User"; // Adjust the path as necessary
-import { Optional } from "sequelize";
 
-interface UserAttributes {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  isVerified: boolean;
-  premiumUntil?: Date;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
-
-class UserService {
+class UserInService {
   static async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await User.findOne({ where: { email } });
@@ -24,4 +12,4 @@ class UserService {
   }
 }
 
-export default UserService;
+export default UserInService;

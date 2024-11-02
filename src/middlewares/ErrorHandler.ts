@@ -20,6 +20,10 @@ export async function errorHandler(
     res.status(403).json({
       msg: "You don't have permission to do this action",
     });
+  } else if (err.name === "no.quota") {
+    res.status(403).json({
+      msg: "You are out of swiping quota",
+    });
   } else {
     res.status(500).json({ message: "Something is wrong with the server" });
   }

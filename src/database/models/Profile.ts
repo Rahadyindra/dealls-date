@@ -18,6 +18,9 @@ interface ProfileAttributes {
   age: number;
   gender?: string;
   profilePicture?: string;
+  isVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface ProfileCreationAttributes extends Optional<ProfileAttributes, "id"> {}
@@ -52,6 +55,9 @@ class Profile extends Model<ProfileAttributes, ProfileCreationAttributes> {
 
   @Column({ type: DataType.STRING })
   declare profilePicture?: string;
+
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  declare isVerified: boolean;
 
   // Associations
   @BelongsTo(() => User)

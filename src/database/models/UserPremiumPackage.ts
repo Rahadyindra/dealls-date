@@ -6,15 +6,17 @@ import {
   ForeignKey,
   BelongsTo,
 } from "sequelize-typescript";
-import User from "./User"; // Import User model
-import PremiumPackage from "./PremiumPackage"; // Import PremiumPackage model
+import User from "./User";
+import PremiumPackage from "./PremiumPackage";
 import { Optional } from "sequelize";
 
 interface UserPremiumPackageAttributes {
   id: number;
-  userId: number; // Foreign key for User
-  premiumPackageId: number; // Foreign key for PremiumPackage
+  userId: number;
+  premiumPackageId: number;
   purchaseDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UserPremiumPackageCreationAttributes
@@ -49,7 +51,6 @@ class UserPremiumPackage extends Model<
   @Column({ type: DataType.DATE, allowNull: false })
   declare purchaseDate: Date;
 
-  // Associations
   @BelongsTo(() => User)
   declare user: User;
 
