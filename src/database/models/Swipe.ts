@@ -12,9 +12,9 @@ import Profile from "./Profile";
 
 interface SwipeAttributes {
   id: number;
-  userId: number; // Foreign key to User
-  profileId: number; // Foreign key to Profile
-  swipeDirection: "like" | "pass"; // Enum for swipe direction
+  userId: number; 
+  profileId: number; 
+  swipeDirection: "like" | "pass";
 }
 
 interface SwipeCreationAttributes extends Optional<SwipeAttributes, "id"> {}

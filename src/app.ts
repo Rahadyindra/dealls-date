@@ -5,6 +5,8 @@ import cors from "cors";
 import sequelize from "./database/Connection";
 import cookieParser from "cookie-parser";
 import router from "./routes/Index";
+import { errorHandler } from "./middlewares/ErrorHandler";
+import { seed } from "./seeders/Seeder";
 
 const app = express();
 
@@ -16,10 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/", router);
+app.use(errorHandler);
 
 (async () => {
   try {
     await sequelize.sync({ alter: true });
+    await seed();
     app.listen(port, () => {
       console.log(`now listening to ${port}`);
     });

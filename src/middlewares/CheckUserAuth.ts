@@ -18,16 +18,16 @@ export async function userAuthentication(
   try {
     const access_token = req.cookies.access_token;
     if (!access_token) {
-      res.status(401).json({ message: "Please login first" });
+      throw { name: "please.login" };
     }
     const decodedToken = verifyToken(access_token);
     if (!decodedToken) {
-      res.status(403).json({ message: "Invalid token" });
+      throw { message: "please.login" };
     }
     const id = decodedToken?.id;
     const user = await User.findByPk(id);
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      throw { message: "please.login" };
     }
 
     req.user = user as UserResponse;

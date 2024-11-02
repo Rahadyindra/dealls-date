@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { comparePassword, hashPassword } from "../helpers/Bcrypt";
 import User from "../database/models/User";
 import Profile from "../database/models/Profile";
-import UserService from "../database/services/UserService";
+import UserService from "../database/services/UserInService";
 import { createToken } from "../helpers/Jwt";
-import { AppError } from "../errorHandler/Error";
 
 interface RegisterCredentials {
   username: string;
@@ -64,15 +63,15 @@ export async function loginExecuteProcessor(
   try {
     const { email, password } = req.body as unknown as LoginCredentials;
     if (!email || !password) {
-      throw new AppError("Email and password are required", 400);
+      throw { name: "invalid" };
     }
     const loginUser = await UserService.findByEmail(email);
     if (!loginUser) {
-      throw new AppError("Wrong username or password", 401);
+      throw { name: "bad.login" };
     }
     const checkPass = comparePassword(password, loginUser.password);
     if (!checkPass) {
-      throw { name: "badLogin" };
+      throw { name: "bad.login" };
     }
 
     const access_token = createToken({
@@ -107,7 +106,7 @@ export async function logoutExecuteProcessor(
     });
 
     res.status(200).json({
-      message: "Logout successful, access token cookie cleared.",
+      message: "Logout successful",
     });
   } catch (err) {
     next(err);
