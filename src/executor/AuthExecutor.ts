@@ -13,6 +13,7 @@ interface RegisterCredentials {
   gender?: string;
   bio?: string;
   profilePicture?: string;
+  displayName: string;
 }
 
 interface LoginCredentials {
@@ -26,8 +27,16 @@ export async function registerExecuteProcessor(
   next: NextFunction
 ) {
   try {
-    const { username, email, password, age, gender, bio, profilePicture } =
-      req.body as unknown as RegisterCredentials;
+    const {
+      username,
+      email,
+      password,
+      age,
+      gender,
+      bio,
+      profilePicture,
+      displayName,
+    } = req.body as unknown as RegisterCredentials;
     if (!username || !email || !password) {
       throw { name: "invalid" };
     }
@@ -50,6 +59,7 @@ export async function registerExecuteProcessor(
       isVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
+      displayName,
     });
     res.status(201).json({
       message: "Register Successful",

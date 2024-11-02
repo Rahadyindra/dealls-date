@@ -13,6 +13,7 @@ import Swipe from "./Swipe";
 
 interface ProfileAttributes {
   id: number;
+  displayName: string;
   userId: number;
   bio?: string;
   age: number;
@@ -43,6 +44,9 @@ class Profile extends Model<ProfileAttributes, ProfileCreationAttributes> {
     },
   })
   declare userId: number;
+
+  @Column({ type: DataType.STRING })
+  declare displayName: string;
 
   @Column({ type: DataType.TEXT })
   declare bio?: string;

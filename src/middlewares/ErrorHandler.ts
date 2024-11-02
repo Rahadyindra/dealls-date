@@ -8,7 +8,7 @@ export async function errorHandler(
 ): Promise<void> {
   if (err.name === "invalid") {
     res.status(401).json({ message: "Invalid Input" });
-  } else if (err.name === "notFound" || err.name === "BSONError") {
+  } else if (err.name === "not.found") {
     res.status(404).json({ message: "Stuff you looking for doesn't exist" });
   } else if (err.name === "bad.login") {
     res.status(401).json({ message: "Invalid email or password" });

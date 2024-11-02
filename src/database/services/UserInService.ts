@@ -1,6 +1,10 @@
+import { Op } from "sequelize";
+import Swipe from "../models/Swipe";
 import User from "../models/User"; // Adjust the path as necessary
+import Profile from "../models/Profile";
+import { Sequelize } from "sequelize-typescript";
 
-class UserInService {
+export default class UserInService {
   static async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await User.findOne({ where: { email } });
@@ -10,6 +14,5 @@ class UserInService {
       throw new Error("Error finding user");
     }
   }
-}
 
-export default UserInService;
+}

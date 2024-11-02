@@ -42,11 +42,14 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @Column({ type: DataType.DATE })
   declare premiumUntil?: Date;
 
-  @HasMany(() => Profile)
-  declare profiles: Profile[];
+  @HasOne(() => Profile)
+  declare profile: Profile;
 
-  @HasMany(() => Swipe)
-  declare swipes: Swipe[];
+  @HasMany(() => Swipe, { as: "sentSwipes" })
+  declare sentSwipes: Swipe[];
+
+  @HasMany(() => Swipe, { as: "receivedSwipes" })
+  declare receivedSwipes: Swipe[];
 
   @HasOne(() => UserPremiumPackage)
   declare userPremiumPackages: UserPremiumPackage;

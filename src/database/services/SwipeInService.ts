@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import Swipe from "../models/Swipe";
 import { E } from "@faker-js/faker/dist/airline-WjISwexU";
 
-class SwipeInService {
+export default class SwipeInService {
   static async countSizeSwipedToday(userId: number): Promise<number | null> {
     try {
       const today = new Date();
@@ -37,6 +37,5 @@ class SwipeInService {
     });
     return swipes;
   }
-}
 
-export default SwipeInService;
+}

@@ -1,6 +1,6 @@
 import Profile from "../database/models/Profile";
 import User from "../database/models/User"; // Import your models
-import { faker } from "@faker-js/faker";
+import { fa, faker } from "@faker-js/faker";
 import { hashPassword } from "../helpers/Bcrypt";
 import PremiumPackage from "../database/models/PremiumPackage";
 
@@ -31,6 +31,7 @@ export async function seed() {
     isVerified: faker.datatype.boolean(),
     createdAt: new Date(),
     updatedAt: new Date(),
+    displayName: faker.internet.displayName(),
   }));
 
   await Profile.bulkCreate(profiles);
