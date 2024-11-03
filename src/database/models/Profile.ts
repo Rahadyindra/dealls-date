@@ -63,7 +63,6 @@ class Profile extends Model<ProfileAttributes, ProfileCreationAttributes> {
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
   declare isVerified: boolean;
 
-  // Associations
   @BelongsTo(() => User)
   declare user: User;
 

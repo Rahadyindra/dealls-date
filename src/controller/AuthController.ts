@@ -3,7 +3,7 @@ import {
   loginExecuteProcessor,
   logoutExecuteProcessor,
   registerExecuteProcessor,
-} from "../executor/AuthExecutor";
+} from "./executor/AuthExecutor";
 
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {

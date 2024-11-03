@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import SwipeInService from "../database/services/SwipeInService";
-import User from "../database/models/User";
-import ProfileInService from "../database/services/ProfileInService";
-import Swipe from "../database/models/Swipe";
-import Profile from "../database/models/Profile";
+import SwipeInService from "../../database/services/SwipeInService";
+import User from "../../database/models/User";
+import ProfileInService from "../../database/services/ProfileInService";
+import Swipe from "../../database/models/Swipe";
+import Profile from "../../database/models/Profile";
 
 interface RequestBodySwipe {
   like: boolean;

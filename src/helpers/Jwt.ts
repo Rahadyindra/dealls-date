@@ -1,6 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-// Define the payload type
 interface TokenPayload {
   email: string;
   username: string;

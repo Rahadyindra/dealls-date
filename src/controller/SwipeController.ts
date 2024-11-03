@@ -4,7 +4,7 @@ import {
   paginatedProfilesExecute,
   swipeExecuteProcessor,
   unmatchExecuteProcessor,
-} from "../executor/SwipeExecutor";
+} from "./executor/SwipeExecutor";
 
 export class SwipeController {
   static async getPaginatedProfiles(

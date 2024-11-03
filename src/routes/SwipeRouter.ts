@@ -1,5 +1,5 @@
-import { SwipeController } from "../controller/SwipeController";
 import express from "express";
+import { SwipeController } from "../controller/SwipeController";
 
 const swipeRouter = express.Router();
 

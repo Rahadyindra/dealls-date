@@ -28,6 +28,10 @@ export async function errorHandler(
     res.status(403).json({
       msg: "You don't have permission to do this action",
     });
+  } else if (err.name === "bad.login") {
+    res.status(401).json({ message: "Invalid email or password" });
+  } else if (err.name === "cannot.apply") {
+    res.status(401).json({ message: err.message });
   } else if (err.name === "no.quota") {
     res.status(403).json({
       msg: "You are out of swiping quota",

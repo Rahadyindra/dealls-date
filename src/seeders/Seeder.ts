@@ -1,5 +1,5 @@
 import Profile from "../database/models/Profile";
-import User from "../database/models/User"; // Import your models
+import User from "../database/models/User";
 import { fa, faker } from "@faker-js/faker";
 import { hashPassword } from "../helpers/Bcrypt";
 import PremiumPackage from "../database/models/PremiumPackage";
@@ -37,15 +37,6 @@ export async function seed() {
   await Profile.bulkCreate(profiles);
 
   await PremiumPackage.bulkCreate([
-    {
-      packageName: "Silver",
-      description: "Basic access with limited features",
-      price: 9.99,
-      noSwipeQuota: false,
-      verifiedLabel: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
     {
       packageName: "Gold",
       description: "Extended access with more features",

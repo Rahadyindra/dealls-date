@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { comparePassword, hashPassword } from "../helpers/Bcrypt";
-import User from "../database/models/User";
-import Profile from "../database/models/Profile";
-import UserInService from "../database/services/UserInService";
-import { createToken } from "../helpers/Jwt";
+import { comparePassword, hashPassword } from "../../helpers/Bcrypt";
+import User from "../../database/models/User";
+import Profile from "../../database/models/Profile";
+import UserInService from "../../database/services/UserInService";
+import { createToken } from "../../helpers/Jwt";
 
 interface RegisterCredentials {
   username: string;

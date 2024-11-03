@@ -1,5 +1,5 @@
 {
-  "include": ["src", "global.d.ts"],
+  "include": ["src", "global.d.ts", "src/routes/SwipeRouter.ts/.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
