@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import SwipeInService from "../../database/services/SwipeInService";
-import User from "../../database/models/User";
 import ProfileInService from "../../database/services/ProfileInService";
 import Profile from "../../database/models/Profile";
 import Swipe from "../../database/models/Swipe";
+import UserInService from "../../database/services/UserInService";
 
 interface RequestBodySwipe {
   like: boolean;
@@ -117,6 +117,7 @@ export async function matchedProfileExecute(
   next: NextFunction
 ) {
   try {
+ 
     const userId = req?.user?.id;
     if (!userId) {
       throw { name: "forbidden" };
@@ -171,12 +172,14 @@ async function validateQuota(req: Request, res: Response, next: NextFunction) {
       throw { name: "forbidden" };
     }
     const swipes = (await SwipeInService.countSizeSwipedToday(userId)) || 0;
-    const user = await User.findByPk(userId);
+    const user = await UserInService.findByUserIdIncludeProfileAndPackage(
+      userId
+    );
     if (!user) {
       throw { name: "forbidden" };
     }
 
-    if (swipes > 10 && !user.userPremiumPackage?.premiumPackage.noSwipeQuota) {
+    if (swipes > 9 && !user.userPremiumPackage?.premiumPackage.noSwipeQuota) {
       throw { name: "no.quota" };
     }
   } catch (err) {

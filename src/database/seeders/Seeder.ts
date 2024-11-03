@@ -1,8 +1,8 @@
-import Profile from "../database/models/Profile";
-import User from "../database/models/User";
+import Profile from "../models/Profile";
+import User from "../models/User";
 import { fa, faker } from "@faker-js/faker";
-import { hashPassword } from "../helpers/Bcrypt";
-import PremiumPackage from "../database/models/PremiumPackage";
+import { hashPassword } from "../../helpers/Bcrypt";
+import PremiumPackage from "../models/PremiumPackage";
 
 export async function seed() {
   const userCount = await User.count();

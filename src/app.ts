@@ -6,7 +6,7 @@ import sequelize from "./database/Connection";
 import cookieParser from "cookie-parser";
 import router from "./routes/Index";
 import { errorHandler } from "./middlewares/ErrorHandler";
-import { seed } from "./seeders/Seeder";
+import { seed } from "./database/seeders/Seeder";
 
 const app = express();
 

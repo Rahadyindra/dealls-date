@@ -64,22 +64,25 @@ export default class ProfileInService {
         where: {
           id: {
             [Op.in]: Sequelize.literal(`(
-        SELECT "profileId"
-        FROM "swipes" AS s1
-        WHERE s1."userId" = ${userId} 
-          AND (
-            EXISTS (
-              SELECT 1
-              FROM "swipes" AS s2
-              WHERE s2."userId" = s1."profileId"
-                AND s2."profileId" = ${profileId}
-                AND s2."like" = true
-                AND s1."like" = true
-                AND s2."latest" = true
-                AND s1."latest" = true
-            )
+            SELECT p1."id"
+            FROM "swipes" AS s1
+            JOIN "profiles" AS p1 ON s1."profileId" = p1."id"
+            WHERE s1."userId" = ${userId}
+              AND (
+                EXISTS (
+                  SELECT 1
+                  FROM "swipes" AS s2
+                  JOIN "profiles" AS p2 ON s2."userId" = p2."userId"
+                  WHERE s2."userId" = p2."userId"
+                    AND s2."profileId" = ${profileId}
+                    AND s2."like" = true
+                    AND s1."like" = true
+                    AND s2."latest" = true
+                    AND s1."latest" = true
+                )
+              )
           )
-      )`),
+`),
           },
           userId: {
             [Op.ne]: userId,

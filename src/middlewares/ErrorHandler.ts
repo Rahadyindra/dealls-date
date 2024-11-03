@@ -26,7 +26,7 @@ export async function errorHandler(
     });
   } else if (err.name === "forbidden") {
     res.status(403).json({
-      msg: "You don't have permission to do this action",
+      message: "You don't have permission to do this action",
     });
   } else if (err.name === "bad.login") {
     res.status(401).json({ message: "Invalid email or password" });
@@ -34,11 +34,14 @@ export async function errorHandler(
     res.status(401).json({ message: err.message });
   } else if (err.name === "no.quota") {
     res.status(403).json({
-      msg: "You are out of swiping quota",
+      message: "You are out of swiping quota",
     });
-  } else if (err.name === "SequelizeUniqueConstraintError") {
+  } else if (
+    err.name === "SequelizeUniqueConstraintError" ||
+    err.name === "SequelizeValidationError"
+  ) {
     res.status(401).json({
-      msg: err.message,
+      message: err.message,
     });
   } else {
     res.status(500).json({ message: "Something is wrong with the server" });

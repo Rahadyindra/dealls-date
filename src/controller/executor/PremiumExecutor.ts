@@ -135,6 +135,15 @@ export async function unApplyPremiumExecuteProcessor(
       },
     });
 
+    await Profile.update(
+      {
+        isVerified: false,
+      },
+      {
+        where: { userId },
+      }
+    );
+
     return res.status(201).json({
       message: "Successfully unapplied your package",
     });
