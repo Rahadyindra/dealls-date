@@ -15,7 +15,6 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string;
-  premiumUntil?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,17 +29,25 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
   declare id: number;
 
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
   declare username: string;
 
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+    validate: {
+      isEmail: true,
+    },
+  })
   declare email: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
-
-  @Column({ type: DataType.DATE })
-  declare premiumUntil?: Date;
 
   @HasOne(() => Profile)
   declare profile: Profile;
@@ -51,8 +58,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   @HasMany(() => Swipe, { as: "receivedSwipes" })
   declare receivedSwipes: Swipe[];
 
-  @HasOne(() => UserPremiumPackage)
-  declare userPremiumPackages: UserPremiumPackage;
+  @HasOne(() => UserPremiumPackage, { as: "userPremiumPackage" })
+  declare userPremiumPackage: UserPremiumPackage;
 }
 
 export default User;

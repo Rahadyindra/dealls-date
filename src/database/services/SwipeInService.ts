@@ -60,4 +60,35 @@ export default class SwipeInService {
     });
     return swipes;
   }
+
+  static async findByUserIdAndProfileIdToday(
+    userId: number,
+    profileId: number
+  ): Promise<Swipe | null> {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const swipes = await Swipe.findOne({
+      where: {
+        userId,
+        profileId,
+        createdAt: {
+          [Op.gte]: todayStart,
+          [Op.lte]: todayEnd,
+        },
+        latest: true,
+      },
+      include: [
+        {
+          model: Profile,
+          as: "profile",
+        },
+      ],
+    });
+
+    return swipes;
+  }
 }

@@ -109,7 +109,7 @@ export async function loginExecuteProcessor(
   }
 }
 
-export async function logoutExecuteProcessor(
+export function logoutExecuteProcessor(
   req: Request,
   res: Response,
   next: NextFunction

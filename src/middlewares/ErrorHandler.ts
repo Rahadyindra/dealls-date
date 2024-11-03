@@ -36,6 +36,10 @@ export async function errorHandler(
     res.status(403).json({
       msg: "You are out of swiping quota",
     });
+  } else if (err.name === "SequelizeUniqueConstraintError") {
+    res.status(401).json({
+      msg: err.message,
+    });
   } else {
     res.status(500).json({ message: "Something is wrong with the server" });
   }

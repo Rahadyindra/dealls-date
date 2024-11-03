@@ -1,26 +1,45 @@
 import { Request, Response, NextFunction } from "express";
-import { getAllAvailablePremiumPackage } from "./executor/PremiumExecutor";
+import {
+  applyPremiumExecuteProcessor,
+  getAllAvailablePremiumPackageExecute,
+  unApplyPremiumExecuteProcessor,
+} from "./executor/PremiumExecutor";
 
 export class PremiumController {
   static async getPremiumOptions(
+    this: void,
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      getAllAvailablePremiumPackage(req, res, next);
+      await getAllAvailablePremiumPackageExecute(req, res, next);
     } catch (err) {
       next(err);
     }
   }
 
   static async doAppyPremium(
+    this: void,
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      getAllAvailablePremiumPackage(req, res, next);
+      await applyPremiumExecuteProcessor(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async unApplyPremium(
+    this: void,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await unApplyPremiumExecuteProcessor(req, res, next);
     } catch (err) {
       next(err);
     }

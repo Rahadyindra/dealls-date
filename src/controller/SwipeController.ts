@@ -8,40 +8,52 @@ import {
 
 export class SwipeController {
   static async getPaginatedProfiles(
+    this: void,
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      paginatedProfilesExecute(req, res, next);
+      await paginatedProfilesExecute(req, res, next);
     } catch (err) {
       next(err);
     }
   }
 
-  static async doSwipe(req: Request, res: Response, next: NextFunction) {
+  static async doSwipe(
+    this: void,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      swipeExecuteProcessor(req, res, next);
+      await swipeExecuteProcessor(req, res, next);
     } catch (err) {
       next(err);
     }
   }
 
   static async getMatchedProfile(
+    this: void,
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      matchedProfileExecute(req, res, next);
+      await matchedProfileExecute(req, res, next);
     } catch (err) {
       next(err);
     }
   }
 
-  static async doUnmatch(req: Request, res: Response, next: NextFunction) {
+  static async doUnmatch(
+    this: void,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      unmatchExecuteProcessor(req, res, next);
+      await unmatchExecuteProcessor(req, res, next);
     } catch (err) {
       next(err);
     }

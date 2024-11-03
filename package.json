@@ -2,11 +2,15 @@
   "name": "dealltest",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node dist/app.js",
-    "sequelize": "sequelize-cli --config src/.sequelize.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "prod": "npm run build && node dist/app.js",
+    "lint": "eslint",
+    "prestart": "npm run build"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +36,7 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
+    "@types/eslint__js": "^8.42.3",
     "@types/sequelize": "^4.28.20",
     "nodemon": "^3.1.7",
     "rimraf": "^6.0.1",

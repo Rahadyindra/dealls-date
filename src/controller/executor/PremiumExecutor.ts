@@ -4,21 +4,23 @@ import UserInService from "../../database/services/UserInService";
 import PremiumPackage from "../../database/models/PremiumPackage";
 import PremiumPackageEnum from "../../enums/PremiumPackageEnum";
 import UserPremiumPackage from "../../database/models/UserPremiumPackage";
+import User from "../../database/models/User";
+import Profile from "../../database/models/Profile";
 
-export async function getAllAvailablePremiumPackage(
+export async function getAllAvailablePremiumPackageExecute(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const premiumPackages = PremiumPackageInService.findAllAvailable();
+    const premiumPackages = await PremiumPackageInService.findAllAvailable();
     res.status(200).json(premiumPackages);
   } catch (err) {
     next(err);
   }
 }
 
-export async function doApplyPremium(
+export async function applyPremiumExecuteProcessor(
   req: Request,
   res: Response,
   next: NextFunction
@@ -40,19 +42,28 @@ export async function doApplyPremium(
     if (!premiumPackage) {
       throw { name: "not.found" };
     }
-    if (!user?.userPremiumPackages) {
-      UserPremiumPackage.create({
+    if (!user?.userPremiumPackage) {
+      await UserPremiumPackage.create({
         userId,
         premiumPackageId: packageId,
         purchaseDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+
+      await Profile.update(
+        { isVerified: premiumPackage.verifiedLabel },
+        {
+          where: {
+            userId,
+          },
+        }
+      );
       return res.status(201).json({
         message: `Successfully applied package ${premiumPackage?.packageName}`,
       });
     }
-    if (user?.userPremiumPackages?.premiumPackage.id === packageId) {
+    if (user?.userPremiumPackage?.premiumPackage.id === +packageId) {
       throw {
         name: "cannot.apply",
         message: `You cannot apply for ${premiumPackage?.packageName}`,
@@ -61,7 +72,7 @@ export async function doApplyPremium(
 
     if (
       premiumPackage?.packageName == PremiumPackageEnum.Gold &&
-      user?.userPremiumPackages?.premiumPackage.packageName ==
+      user?.userPremiumPackage?.premiumPackage.packageName ==
         PremiumPackageEnum.Platinum
     ) {
       throw {
@@ -83,9 +94,49 @@ export async function doApplyPremium(
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+    await Profile.update(
+      { isVerified: premiumPackage.verifiedLabel },
+      {
+        where: {
+          userId,
+        },
+      }
+    );
 
     return res.status(201).json({
       message: `Successfully applied package ${premiumPackage?.packageName}`,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function unApplyPremiumExecuteProcessor(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req?.user?.id;
+
+    if (!userId) {
+      throw { name: "forbidden" };
+    }
+    const user = await UserInService.findByUserIdIncludeProfileAndPackage(
+      userId
+    );
+    if (!user?.userPremiumPackage) {
+      throw { name: "forbidden" };
+    }
+
+    await UserPremiumPackage.destroy({
+      where: {
+        userId,
+      },
+    });
+
+    return res.status(201).json({
+      message: "Successfully unapplied your package",
     });
   } catch (err) {
     next(err);

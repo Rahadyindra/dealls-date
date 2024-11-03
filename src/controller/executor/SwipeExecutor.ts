@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import SwipeInService from "../../database/services/SwipeInService";
 import User from "../../database/models/User";
 import ProfileInService from "../../database/services/ProfileInService";
-import Swipe from "../../database/models/Swipe";
 import Profile from "../../database/models/Profile";
+import Swipe from "../../database/models/Swipe";
 
 interface RequestBodySwipe {
   like: boolean;
@@ -16,8 +16,6 @@ export async function paginatedProfilesExecute(
   next: NextFunction
 ) {
   try {
-    validateQuota(req, res, next);
-
     const userId = req?.user?.id;
     if (!userId) {
       throw { name: "forbidden" };
@@ -40,6 +38,7 @@ export async function swipeExecuteProcessor(
   next: NextFunction
 ) {
   try {
+    validateQuota(req, res, next);
     const userId = req?.user?.id;
     const { like, profileId }: RequestBodySwipe = req.body;
     if (!userId) {
@@ -58,7 +57,13 @@ export async function swipeExecuteProcessor(
     if (!userProfile) {
       throw { name: "not.found" };
     }
-
+    const swipe = await SwipeInService.findByUserIdAndProfileIdToday(
+      userId,
+      profile?.id
+    );
+    if (swipe) {
+      throw { name: "invalid.input" };
+    }
     const profilesMatched =
       await ProfileInService.findAllProfileMatchedByUserId(
         userId,
@@ -171,10 +176,7 @@ async function validateQuota(req: Request, res: Response, next: NextFunction) {
       throw { name: "forbidden" };
     }
 
-    if (
-      swipes >= 10 &&
-      !user.userPremiumPackages?.premiumPackage.noSwipeQuota
-    ) {
+    if (swipes > 10 && !user.userPremiumPackage?.premiumPackage.noSwipeQuota) {
       throw { name: "no.quota" };
     }
   } catch (err) {
