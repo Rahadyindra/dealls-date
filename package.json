@@ -4,12 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc",
     "start": "node dist/App.js",
-    "dev": "nodemon dist/App.js",
-    "prod": "npm run build && node dist/app.js",
-    "lint": "eslint",
-    "prestart": "npm run build"
+    "dev": "nodemon dist/App.js"
   },
   "keywords": [],
   "author": "",

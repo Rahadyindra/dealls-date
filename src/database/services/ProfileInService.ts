@@ -1,9 +1,6 @@
-import { NumberColorFormat } from "@faker-js/faker/.";
 import Profile from "../models/Profile";
-import User from "../models/User";
 import { Op } from "sequelize";
 import { Sequelize } from "sequelize-typescript";
-import Swipe from "../models/Swipe";
 
 export default class ProfileInService {
   static async pagingProfileForTodayByUserId(

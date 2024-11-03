@@ -1,6 +1,5 @@
 import { Op } from "sequelize";
 import Swipe from "../models/Swipe";
-import { E } from "@faker-js/faker/dist/airline-WjISwexU";
 import Profile from "../models/Profile";
 
 export default class SwipeInService {

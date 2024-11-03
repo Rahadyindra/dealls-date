@@ -1,6 +1,5 @@
 import User from "../models/User";
 import Profile from "../models/Profile";
-import { Sequelize } from "sequelize-typescript";
 import UserPremiumPackage from "../models/UserPremiumPackage";
 import PremiumPackage from "../models/PremiumPackage";
 
