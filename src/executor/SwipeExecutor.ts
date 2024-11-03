@@ -10,7 +10,7 @@ interface RequestBodySwipe {
   profileId: number;
 }
 
-export async function paginatedProfilesExecuteProcessor(
+export async function paginatedProfilesExecute(
   req: Request,
   res: Response,
   next: NextFunction
@@ -28,7 +28,7 @@ export async function paginatedProfilesExecuteProcessor(
       userId,
       page
     );
-    res.json({ page, profiles });
+    res.status(200).json({ page, profiles });
   } catch (err) {
     next(err);
   }
@@ -41,11 +41,42 @@ export async function swipeExecuteProcessor(
 ) {
   try {
     const userId = req?.user?.id;
+    const { like, profileId }: RequestBodySwipe = req.body;
     if (!userId) {
       throw { name: "forbidden" };
     }
 
-    const latestSwipes = await SwipeInService.findAllByUserIdAndLatest(userId);
+    const profile = await Profile.findByPk(profileId);
+    if (!profile) {
+      throw { name: "not.found" };
+    }
+    if (profile.userId === userId) {
+      throw { name: "invalid.input" };
+    }
+
+    const userProfile = await ProfileInService.findByUserId(userId);
+    if (!userProfile) {
+      throw { name: "not.found" };
+    }
+
+    const profilesMatched =
+      await ProfileInService.findAllProfileMatchedByUserId(
+        userId,
+        userProfile?.id
+      );
+
+    const isProfileAlreadyMatched = profilesMatched.some((matchedProfile) => {
+      return matchedProfile.id === profileId;
+    });
+
+    if (isProfileAlreadyMatched) {
+      throw { name: "already.matched" };
+    }
+
+    const latestSwipes = await SwipeInService.findAllByUserIdAndProfileId(
+      userId,
+      profileId
+    );
 
     if (latestSwipes && latestSwipes.length > 0) {
       const swipeIds = latestSwipes.map((swipe) => swipe.id);
@@ -53,13 +84,8 @@ export async function swipeExecuteProcessor(
       await Swipe.update({ latest: false }, { where: { id: swipeIds } });
     }
 
-    const { like, profileId }: RequestBodySwipe = req.body;
     if (like == undefined || !profileId) {
       throw { name: "invalid.input" };
-    }
-    const profile = await Profile.findByPk(profileId);
-    if (!profile) {
-      throw { name: "not.found" };
     }
 
     await Swipe.create({
@@ -80,7 +106,7 @@ export async function swipeExecuteProcessor(
   }
 }
 
-export async function getMatchedProfile(
+export async function matchedProfileExecute(
   req: Request,
   res: Response,
   next: NextFunction
@@ -97,6 +123,37 @@ export async function getMatchedProfile(
     const profilesMatched =
       await ProfileInService.findAllProfileMatchedByUserId(userId, profile?.id);
     res.status(200).json(profilesMatched);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function unmatchExecuteProcessor(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req?.user?.id;
+    if (!userId) {
+      throw { name: "forbidden" };
+    }
+    const profileId: number = req.body.profileId;
+    if (!profileId) {
+      throw { name: "invalid.input" };
+    }
+    const swipe = await SwipeInService.findByUserIdAndProfileId(
+      userId,
+      profileId
+    );
+    if (!swipe) {
+      throw { name: "not.found" };
+    }
+    await swipe.update({ latest: false });
+
+    res
+      .status(201)
+      .json({ message: `Sucessfully umatched ${swipe.profile?.displayName}` });
   } catch (err) {
     next(err);
   }

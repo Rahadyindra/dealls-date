@@ -6,4 +6,5 @@ export default {
   "seeders-path": path.resolve("seeders"),
   "migrations-path": path.resolve("migrations"),
   extensions: ["ts", "js"],
+  logging: false,
 };

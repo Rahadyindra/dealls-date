@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import Swipe from "../models/Swipe";
 import { E } from "@faker-js/faker/dist/airline-WjISwexU";
+import Profile from "../models/Profile";
 
 export default class SwipeInService {
   static async countSizeSwipedToday(userId: number): Promise<number | null> {
@@ -26,16 +27,37 @@ export default class SwipeInService {
     }
   }
 
-  static async findAllByUserIdAndLatest(
-    userId: number
+  static async findAllByUserIdAndProfileId(
+    userId: number,
+    profileId: number
   ): Promise<Swipe[] | null> {
     const swipes = await Swipe.findAll({
       where: {
-        userId: userId,
+        userId,
+        profileId,
         latest: true,
       },
     });
     return swipes;
   }
 
+  static async findByUserIdAndProfileId(
+    userId: number,
+    profileId: number
+  ): Promise<Swipe | null> {
+    const swipes = await Swipe.findOne({
+      where: {
+        userId,
+        profileId,
+        latest: true,
+      },
+      include: [
+        {
+          model: Profile,
+          as: "profile",
+        },
+      ],
+    });
+    return swipes;
+  }
 }

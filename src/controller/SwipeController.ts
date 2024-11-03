@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  getMatchedProfile,
-  paginatedProfilesExecuteProcessor,
+  matchedProfileExecute,
+  paginatedProfilesExecute,
   swipeExecuteProcessor,
+  unmatchExecuteProcessor,
 } from "../executor/SwipeExecutor";
 
 export class SwipeController {
@@ -12,7 +13,7 @@ export class SwipeController {
     next: NextFunction
   ) {
     try {
-      paginatedProfilesExecuteProcessor(req, res, next);
+      paginatedProfilesExecute(req, res, next);
     } catch (err) {
       next(err);
     }
@@ -32,7 +33,15 @@ export class SwipeController {
     next: NextFunction
   ) {
     try {
-      getMatchedProfile(req, res, next);
+      matchedProfileExecute(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async doUnmatch(req: Request, res: Response, next: NextFunction) {
+    try {
+      unmatchExecuteProcessor(req, res, next);
     } catch (err) {
       next(err);
     }

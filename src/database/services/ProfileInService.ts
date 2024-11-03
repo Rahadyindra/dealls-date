@@ -88,7 +88,6 @@ export default class ProfileInService {
       });
       return matchedProfiles || [];
     } catch (error) {
-      console.log(error);
       throw { name: "not.found" };
     }
   }

@@ -39,7 +39,7 @@ class Swipe extends Model<SwipeAttributes, SwipeCreationAttributes> {
     type: DataType.INTEGER,
     allowNull: false,
     references: {
-      model: User,
+      model: Profile,
       key: "id",
     },
   })
